@@ -87,11 +87,45 @@ mvn spring-boot:run
 ```
 ---
 
+### BeerServiceBusinessRulesTest – Teste acrescentado
+
+**Objetivo:**
+Testar as regras de negócio do BeerService relacionadas ao gerenciamento de estoque de cervejas, garantindo que incrementos e decrementos respeitem os limites definidos (max e mínimo 0).
+
+#### Setup
+
+- Um mock do BeerRepository é usado para simular operações de banco.
+- Um objeto Beer é criado para os testes (BeerBuilder).
+- BeerService é injetado com o mock, permitindo testar a lógica sem depender do banco real.
+
+#### Testes Realizados
+
+1. **Incremento acima do máximo (`shouldThrowException_whenIncrementExceedsMaxStock`)**
+   - **Cenário:** adicionar quantidade que ultrapassa o estoque máximo.
+   - **Esperado:** lançar **BeerStockExceededException**.
+   - **Verificação:** nenhum `save` é chamado no repository.
+
+2. **Decremento abaixo de zero (`shouldThrowException_whenDecrementResultsInNegativeStock`)**
+   - **Cenário:** remover mais cerveja do que existe no estoque.
+   - **Esperado:** lançar **BeerStockExceededException**.
+   - **Verificação:** nenhum `save` é chamado.
+
+3. **Incremento válido (`shouldUpdateQuantity_whenIncrementIsWithinLimit`)**
+   - **Cenário:** adicionar quantidade dentro do limite máximo.
+   - **Esperado:** estoque atualizado corretamente.
+   - **Verificação:** `save` é chamado no repository.
+
+4. **Decremento válido (`shouldUpdateQuantity_whenDecrementIsValid`)**
+   - **Cenário:** remover quantidade válida do estoque.
+   - **Esperado:** estoque atualizado corretamente.
+   - **Verificação:** `save` é chamado no repository.
+
+
 ### 👨‍💻 Autor da atualização
 
 Vitor Jônatas
 
-Backend Developer | Java | Spring Boot
+Backend Developer | QA | Java | Spring Boot
 
 
 
